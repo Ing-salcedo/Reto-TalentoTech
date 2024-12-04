@@ -82,11 +82,11 @@
                     </a>
                     <a class="nav-icon position-relative text-decoration-none" href="#">
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                        <span id="carrito-value" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
                     </a>
                     <a class="nav-icon position-relative text-decoration-none" href="#">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+9</span>
+                        <span id="contador" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
                 </div>
             </div>               
@@ -156,179 +156,19 @@
 
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-md-6">
-                        <ul class="list-inline shop-top-menu pb-3 pt-1">
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none mr-3" href="#">Todo</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none mr-3" href="#">Hombres</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a class="h3 text-dark text-decoration-none" href="#">Mujeres</a>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="col-md-6 pb-4">
                         <div class="d-flex">
-                            <select class="form-control">
-                                <option>Presentar</option>
-                                <option>A a Z</option>
-                                <option>Item</option>
+                            <select id="filtro" class="form-control">
+                                <option value="todas">Todas</option>
+                                <option value="Oversizes">Oversizes</option>
+                                <option value="Joggers">Joggers</option>
+                                <option value="Gorras">Gorras</option>
+                                <option value="Sueters">Sueters</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <!-- productos en el carro -->
-                <script>
-                    //DOM
-                    document.addEventListener('DOMContentLoaded',() =>{
-                        //Variables -base de datos
-                        const baseDeDatos=[
-                            {
-                                id:1,
-                                nombre: 'Joggers, de todos los estilos...',
-                                precio: 90000,
-                                imagen: 'assets/img/Jogger_2.jpg'
-                            },
-                            {
-                                id:3,
-                                nombre: 'Oversize',
-                                precio: 45000,
-                                imagen: 'assets/img/Carrusel_2.png'
-                            },
-                            {
-                                id:2,
-                                nombre: 'Gorras, a tu medida y estilo...',
-                                precio: 35000,
-                                imagen: 'assets/img/gorras_Cat.jpg'
-                            }
-                        ];
-                        let carrito = [];
-                        const divisa = '$';
-                        const DOMitems = document.querySelector('#items');
-                        const DOMcarrito = document.querySelector('#carrito');
-                        const DOMtotal = document.querySelector('#total');
-                        const DOMbotonVaciar = document.querySelector('#boton-vaciar');
-                    
-
-                    //seccion de funciones 
-                    /*
-                    Dibujamos todos los productos a partir de la base de datos
-                    */
-                function renderizarProductos(){
-                    baseDeDatos.forEach((info) =>{
-                        //estructura
-                        const miNodo = document.createElement('div');
-                        miNodo.classList.add('card','col-sm-4');
-                        //body
-                        const miNodoCardBody = document.createElement('div');
-                        miNodoCardBody.classList.add('card-body');
-                        //titulo
-                        const miNodoTitle = document.createElement('h6');
-                        miNodoTitle.classList.add('card-tilte');
-                        miNodoTitle.textContent =info.nombre;
-                        //imagen
-                        const miNodoImagen = document.createElement('img');
-                        miNodoImagen.classList.add('img-fluid');
-                        miNodoImagen.setAttribute('src',info.imagen);
-                        //precio
-                        const miNodoPrecio = document.createElement('p');
-                        miNodoPrecio.classList.add('card-text');
-                        miNodoPrecio.textContent =  `${divisa}${info.precio}`;
-                        // Boton
-                        const miNodoBoton = document.createElement('button');
-                        miNodoBoton.classList.add('btn', 'btn-primary');
-                        miNodoBoton.textContent = 'Agregar';
-                        miNodoBoton.setAttribute('marcador', info.id);
-                        miNodoBoton.addEventListener('click', anadirProductoAlCarrito);
-
-                        //insertamos
-                        miNodoCardBody.appendChild(miNodoImagen);
-                        miNodoCardBody.appendChild(miNodoTitle);
-                        miNodoCardBody.appendChild(miNodoPrecio);
-                        miNodoCardBody.appendChild(miNodoBoton);
-                        miNodo.appendChild(miNodoCardBody);
-                        DOMitems.appendChild(miNodo);
-                    });
-                }
-                /**
-            * Evento para añadir un producto al carrito de la compra
-            */
-            function anadirProductoAlCarrito(evento) {
-                // Anyadimos el Nodo a nuestro carrito
-                carrito.push(evento.target.getAttribute('marcador'))
-                // Actualizamos el carrito
-                renderizarCarrito();
-                
-
-                    handleCarritoValue(carrito.length)
-
-            }
-            function handleCarritoValue(value) {
-                const carritoContainer = document.getElementById("carrito-value");
-                carritoContainer.textContent =  `${value}`
-            }
-
-                //dibujar todos los productos guardados en el carrito
-                function renderizarCarrito() {
-                // Vaciamos todo el html
-                DOMcarrito.textContent = '';
-                // Quitamos los duplicados
-                const carritoSinDuplicados = [...new Set(carrito)];
-                // Generamos los Nodos a partir de carrito
-                carritoSinDuplicados.forEach((item) => {
-                    // Obtenemos el item que necesitamos de la variable base de datos
-                    const miItem = baseDeDatos.filter((itemBaseDatos) => {
-                        // ¿Coincide las id? Solo puede existir un caso
-                        return itemBaseDatos.id === parseInt(item);
-                    });
-                    // Cuenta el número de veces que se repite el producto
-                    const numeroUnidadesItem = carrito.reduce((total, itemId) => {
-                        // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
-                        return itemId === item ? total += 1 : total;
-                    }, 0);
-                    // Creamos el nodo del item del carrito
-                    const miNodo = document.createElement('li');
-                    miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
-                    miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio}${divisa}`;
-                    // Boton de borrar
-                    const miBoton = document.createElement('button');
-                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
-                    miBoton.textContent = 'X';
-                    miBoton.style.marginLeft = '1rem';
-                    miBoton.dataset.item = item;
-                    miBoton.addEventListener('click', borrarItemCarrito);
-                    // Mezclamos nodos
-                    miNodo.appendChild(miBoton);
-                    DOMcarrito.appendChild(miNodo);
-                });
-            }
-                /**
-            * Evento para borrar un elemento del carrito
-            */
-            function borrarItemCarrito(evento) {
-                // Obtenemos el producto ID que hay en el boton pulsado
-                const id = evento.target.dataset.item;
-                // Borramos todos los productos
-                carrito = carrito.filter((carritoId) => {
-                    return carritoId !== id;
-                });
-                // volvemos a renderizar
-                    renderizarCarrito();
-                // Actualizamos el LocalStorage
-                    guardarCarritoEnLocalStorage();
-
-                    handleCarritoValue(carrito.length)
-            }
-                renderizarProductos();
-                renderizarCarrito();
-                });
-
-
-                </script>
-
-
                 <!-- fin de productos -->
                 <!-- carrito -->
                 <div class="container">
@@ -344,9 +184,28 @@
                             <!-- Precio total -->
                             <p class="text-right">Total: $ <span id="total"></span></p>
                             <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
-                            <button id="" class="btn btn-info">Pagar</button>
+                            <button class="btn btn-info">
+                            <a href="pago.html" target="target_blank">Pagar</a>
+                            </button>
+                            <button class="btn btn-info">
+                            <a href="https://www.paypal.com/invoice/p/#X9AMTLCL84389TKX" target="target_blank">Pagar</a>
+                            </button>
                         </aside>
                     </div>
+                </div>
+                <!-- paginacion -->
+                <div class="row">
+                    <ul class="pagination pagination-lg justify-content-end">
+                        <li class="page-item disabled">
+                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -443,5 +302,6 @@
         <script src="assets/js/jquery-1.11.0.min.js"></script>
         <script src="assets/js/templatemo.js"></script>
         <script src="assets/js/custom.js"></script>
+        <script src="assets/js/carrito.js"></script>
 </body>
 </html>
