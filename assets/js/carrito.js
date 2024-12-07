@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             id: 5,
-            nombre: 'Sueters Marca POW',
+            nombre: 'Suéteres Marca POW',
             precio: 50000,
             imagen: 'assets/img/Carrusel_1.png',
             categoria: 'Camisetas'
