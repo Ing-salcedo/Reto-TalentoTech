@@ -67,6 +67,10 @@ body, ul, li, p, a, label, input, div {
   background-color: #69bb7e;
   color: #fff;
 }
+
+#item-menu{
+  font-family: 'goldman';
+}
 /* Nav */
 #templatemo_nav_top { min-height: 40px;}
 #templatemo_nav_top * { font-size: .9em !important;}
