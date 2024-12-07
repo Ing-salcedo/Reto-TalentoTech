@@ -182,7 +182,6 @@ document.getElementById('contador').textContent = visitas;
         carrito = [];
         renderizarCarrito();
         handleCarritoValue(carrito.length);
-        localStorage.clear();
     }
 
     function guardarCarritoEnLocalStorage() {
